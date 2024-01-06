@@ -4,6 +4,7 @@ ARG GITHUB_TOKEN
 
 RUN apt update && apt install -y \
     libpq-dev \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
