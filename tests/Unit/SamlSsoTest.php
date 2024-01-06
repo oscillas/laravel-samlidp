@@ -1,13 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace CodeGreenCreative\SamlIdp\Tests;
+namespace CodeGreenCreative\SamlIdp\Tests\Unit;
 
 use CodeGreenCreative\SamlIdp\Jobs\SamlSso;
 use CodeGreenCreative\SamlIdp\Models\ServiceProvider;
+use CodeGreenCreative\SamlIdp\Tests\TestCase;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function CodeGreenCreative\SamlIdp\Tests\factory;
 
 class SamlSsoTest extends TestCase
 {

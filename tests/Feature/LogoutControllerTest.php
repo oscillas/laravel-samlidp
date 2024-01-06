@@ -1,12 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace CodeGreenCreative\SamlIdp\Tests;
+namespace CodeGreenCreative\SamlIdp\Tests\Feature;
 
 use CodeGreenCreative\SamlIdp\Jobs\SamlSlo;
 use CodeGreenCreative\SamlIdp\Models\ServiceProvider;
+use CodeGreenCreative\SamlIdp\Tests\TestCase;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use function CodeGreenCreative\SamlIdp\Tests\factory;
 
 class LogoutControllerTest extends TestCase
 {
