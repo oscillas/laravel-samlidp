@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -24,6 +25,10 @@ return new class extends Migration
             $table->boolean('encrypt_assertion');
             $table->timestamps();
         });
+
+        $stmt = 'ALTER TABLE service_providers ADD CONSTRAINT chk_if_cert_is_required CHECK ';
+        $stmt .= '(certificate IS NOT NULL OR encrypt_assertion = false)';
+        DB::statement($stmt);
     }
 
     /**
