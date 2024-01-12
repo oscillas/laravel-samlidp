@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace CodeGreenCreative\SamlIdp\Tests\Unit;
+namespace CodeGreenCreative\SamlIdp\Tests\Feature;
 
 use CodeGreenCreative\SamlIdp\Jobs\SamlSso;
 use CodeGreenCreative\SamlIdp\Models\ServiceProvider;
