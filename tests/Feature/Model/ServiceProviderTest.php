@@ -19,7 +19,7 @@ class ServiceProviderTest extends TestCase
                 'encrypt_assertion' => false,
             ]);
         } catch (\Exception $e) {
-            this->fail("Create should not have failed: {$e->getMessage()}");
+            $this->fail("Create should not have failed: {$e->getMessage()}");
         }
 
         $this->expectNotToPerformAssertions();
