@@ -33,13 +33,13 @@ class ServiceProviderTest extends TestCase
                 'certificate' => null,
                 'encrypt_assertion' => true,
             ]);
-        } catch (QueryException $qe) {
-            if ($qe->getCode() === '23514') {
+        } catch (\Exception $e) {
+            if (get_class($e) === QueryException::class && $e->getCode() === '23514') {
                 $this->expectNotToPerformAssertions();
                 return;
             }
 
-            $this->fail("Unexpected error: {$qe->getMessage()}");
+            $this->fail("Unexpected error: {$e->getMessage()}");
         }
 
         $this->fail('Create should have failed since encrypt_assertion is true and no certificate was provided');
