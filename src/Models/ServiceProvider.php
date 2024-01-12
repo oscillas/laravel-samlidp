@@ -14,6 +14,7 @@ class ServiceProvider extends Model
         'key_transport_encryption',
         'query_parameters',
         'encrypt_assertion',
+        'binding',
     ];
 
     public function toSpConfig(): array
@@ -26,6 +27,7 @@ class ServiceProvider extends Model
             'encrypt_assertion' => $this->encrypt_assertion,
             'block_encryption_algorithm' => $this->block_encryption_algorithm,
             'key_transport_encryption' => $this->key_transport_encryption,
+            'binding' => $this->binding,
         ];
     }
 }
