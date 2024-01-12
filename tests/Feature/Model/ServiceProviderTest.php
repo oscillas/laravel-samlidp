@@ -28,4 +28,24 @@ class ServiceProviderTest extends TestCase
 
         $this->expectNotToPerformAssertions();
     }
+
+    /** @test */
+    public function certificate_required_if_encrypt_assertions_is_true(): void
+    {
+        try {
+            factory(ServiceProvider::class)->create([
+                'certificate' => null,
+                'encrypt_assertion' => true,
+            ]);
+        } catch (QueryException $qe) {
+            if ($qe->getCode() === '23514') {
+                $this->expectNotToPerformAssertions();
+                return;
+            }
+
+            $this->fail("Unexpected error: {$qe->getMessage()}");
+        }
+
+        $this->fail('Create should have failed since encrypt_assertion is true and no certificate was provided');
+    }
 }
