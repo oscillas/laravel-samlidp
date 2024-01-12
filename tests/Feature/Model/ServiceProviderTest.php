@@ -58,4 +58,28 @@ class ServiceProviderTest extends TestCase
 
         $this->expectNotToPerformAssertions();
     }
+
+    /** @test */
+    public function can_convert_self_to_samlidp_compatible_sp_config(): void
+    {
+        // Arrange
+        $sp = factory(ServiceProvider::class)->make([
+            'certificate' => null,
+            'encrypt_assertion' => false,
+        ]);
+
+        // Act
+        $config = $sp->toSpConfig();
+
+        // Assert
+        $this->assertIsArray($config);
+
+        $this->assertEquals($sp->destination_url, $config['destination']);
+        $this->assertEquals($sp->logout_url, $config['logout']);
+        $this->assertEquals($sp->certificate, $config['certificate']);
+        $this->assertEquals($sp->block_encryption_algorithm, $config['block_encryption_algorithm']);
+        $this->assertEquals($sp->key_transport_encryption, $config['key_transport_encryption']);
+        $this->assertEquals($sp->query_params, $config['query_params']);
+        $this->assertEquals($sp->encrypt_assertion, $config['encrypt_assertion']);
+    }
 }
