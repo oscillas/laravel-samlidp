@@ -142,7 +142,8 @@ class SamlSso implements SamlContract
             );
         }
 
-        return $this->send(SamlConstants::BINDING_SAML2_HTTP_POST);
+        $binding = config(sprintf('samlidp.sp.%s.binding', $this->getServiceProvider($this->authn_request)));
+        return $this->send($binding ?? SamlConstants::BINDING_SAML2_HTTP_POST);
     }
 
     /**
