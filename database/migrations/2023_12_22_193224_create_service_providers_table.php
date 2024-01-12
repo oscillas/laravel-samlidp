@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('destination_url')->unique();
             $table->string('logout_url');
-            $table->string('certificate')->nullable();
+            $table->text('certificate')->nullable();
             $table->string('block_encryption_algorithm');
             $table->string('key_transport_encryption');
             $table->boolean('query_parameters');
