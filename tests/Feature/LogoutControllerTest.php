@@ -8,7 +8,6 @@ use CodeGreenCreative\SamlIdp\Tests\TestCase;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
-use function CodeGreenCreative\SamlIdp\Tests\factory;
 
 class LogoutControllerTest extends TestCase
 {
