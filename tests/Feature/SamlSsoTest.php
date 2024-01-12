@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use LightSaml\SamlConstants;
 
 class SamlSsoTest extends TestCase
 {
@@ -256,5 +257,67 @@ XML;
 
         $this->assertCount(2, config('samlidp.sp'));
         $this->assertEquals($expectedConfigEntry, config("samlidp.sp.$encodedAcsUrl"));
+    }
+
+    /** @test */
+    public function can_send_response_as_redirect(): void
+    {
+        // Arrange
+        $fakeSPConfig = [
+            'destination' => $this->fakeACS,
+            'logout' => 'https://anotherfaketest.com',
+            'certificate' => null,
+            'query_params' => false,
+            'encrypt_assertion' => false,
+            'binding' => SamlConstants::BINDING_SAML2_HTTP_REDIRECT,
+        ];
+
+        $encodedAcsUrl = base64_encode($this->fakeACS);
+        config([
+            'samlidp.sp' => [
+                $encodedAcsUrl => $fakeSPConfig
+            ]
+        ]);
+
+        // Act
+        $samlResponse = (new SamlSso())->handle();
+
+        // Assert
+        $this->assertNotNull($samlResponse);
+
+        $expected = 'Redirecting to <a href="https://test-example.com?SAMLResponse=';
+        $this->assertStringContainsString($expected, $samlResponse);
+    }
+
+    /** @test */
+    public function can_send_response_as_post(): void
+    {
+        // Arrange
+        $fakeSPConfig = [
+            'destination' => $this->fakeACS,
+            'logout' => 'https://anotherfaketest.com',
+            'certificate' => '',
+            'query_params' => false,
+            'encrypt_assertion' => false,
+            'binding' => SamlConstants::BINDING_SAML2_HTTP_POST,
+        ];
+
+        // We HAVE to keep the exact format given in the config, i.e (encoded ACS URL => SP configuration)
+        // Otherwise the SamlSso job will not be able to find the correct service provider configuration
+        $encodedAcsUrl = base64_encode($this->fakeACS);
+        config([
+            'samlidp.sp' => [
+                $encodedAcsUrl => $fakeSPConfig
+            ]
+        ]);
+
+        // Act
+        $samlResponse = (new SamlSso())->handle();
+
+        // Assert
+        $this->assertNotNull($samlResponse);
+
+        $expectedFormTag = '<form method="post"';
+        $this->assertStringContainsString($expectedFormTag, $samlResponse);
     }
 }
