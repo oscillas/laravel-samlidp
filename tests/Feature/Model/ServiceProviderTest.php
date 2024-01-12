@@ -18,12 +18,8 @@ class ServiceProviderTest extends TestCase
                 'certificate' => null,
                 'encrypt_assertion' => false,
             ]);
-        } catch (QueryException $qe) {
-            if ($qe->getCode() === '23502') {
-                $this->fail("Certificate should be optional: {$qe->getMessage()}");
-            }
-
-            throw $qe;
+        } catch (\Exception $e) {
+            this->fail("Create should not have failed: {$e->getMessage()}");
         }
 
         $this->expectNotToPerformAssertions();
@@ -47,5 +43,19 @@ class ServiceProviderTest extends TestCase
         }
 
         $this->fail('Create should have failed since encrypt_assertion is true and no certificate was provided');
+    }
+
+    /** @test */
+    public function certificates_can_be_long(): void
+    {
+        try {
+            factory(ServiceProvider::class)->create([
+                'certificate' => str_repeat('a', 65536 - 1),
+            ]);
+        } catch (\Exception $e) {
+            $this->fail("Create should not have failed: {$e->getMessage()}");
+        }
+
+        $this->expectNotToPerformAssertions();
     }
 }
