@@ -5,11 +5,14 @@ ARG GITHUB_TOKEN
 RUN apt update && apt install -y \
     libpq-dev \
     git \
+    libzip-dev \
+    zip \
     && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-configure zip
 
-RUN docker-php-ext-install pdo pdo_pgsql
+RUN docker-php-ext-install pdo pdo_pgsql zip
 
 COPY --chown=www-data:www-data . /var/www
 
