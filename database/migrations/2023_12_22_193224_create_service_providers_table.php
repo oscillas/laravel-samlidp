@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('key_transport_encryption');
             $table->boolean('query_parameters');
             $table->boolean('encrypt_assertion');
+            $table->string('binding')->nullable();
             $table->timestamps();
         });
 

@@ -252,7 +252,8 @@ XML;
             'query_params' => $serviceProvider->query_parameters,
             'encrypt_assertion' => $serviceProvider->encrypt_assertion,
             'block_encryption_algorithm' => $serviceProvider->block_encryption_algorithm,
-            'key_transport_encryption' => $serviceProvider->key_transport_encryption
+            'key_transport_encryption' => $serviceProvider->key_transport_encryption,
+            'binding' => null,
         ];
 
         $this->assertCount(2, config('samlidp.sp'));

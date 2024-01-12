@@ -7,6 +7,7 @@ namespace CodeGreenCreative\SamlIdp\Tests\Feature\Model;
 use CodeGreenCreative\SamlIdp\Models\ServiceProvider;
 use CodeGreenCreative\SamlIdp\Tests\TestCase;
 use Illuminate\Database\QueryException;
+use LightSaml\SamlConstants;
 
 class ServiceProviderTest extends TestCase
 {
@@ -63,10 +64,7 @@ class ServiceProviderTest extends TestCase
     public function can_convert_self_to_samlidp_compatible_sp_config(): void
     {
         // Arrange
-        $sp = factory(ServiceProvider::class)->make([
-            'certificate' => null,
-            'encrypt_assertion' => false,
-        ]);
+        $sp = factory(ServiceProvider::class)->create();
 
         // Act
         $config = $sp->toSpConfig();
@@ -81,5 +79,34 @@ class ServiceProviderTest extends TestCase
         $this->assertEquals($sp->key_transport_encryption, $config['key_transport_encryption']);
         $this->assertEquals($sp->query_params, $config['query_params']);
         $this->assertEquals($sp->encrypt_assertion, $config['encrypt_assertion']);
+        $this->assertEquals($sp->binding, $config['binding']);
+    }
+
+    /** @test */
+    public function binding_is_nullable(): void
+    {
+        try {
+            factory(ServiceProvider::class)->create([
+                'binding' => null,
+            ]);
+        } catch (\Exception $e) {
+            $this->fail("Create should not have failed: {$e->getMessage()}");
+        }
+
+        $this->expectNotToPerformAssertions();
+    }
+
+    /** @test */
+    public function binding_is_a_string(): void
+    {
+        try {
+            factory(ServiceProvider::class)->create([
+                'binding' => SamlConstants::BINDING_SAML2_HTTP_POST,
+            ]);
+        } catch (\Exception $e) {
+            $this->fail("Create should not have failed: {$e->getMessage()}");
+        }
+
+        $this->expectNotToPerformAssertions();
     }
 }
